@@ -30,7 +30,7 @@ Built with a clean 3-layer architecture:
 <img width="822" height="810" alt="Orders " src="https://github.com/user-attachments/assets/93ccc00b-fd54-460f-b52e-c14672482744" />
 <img width="1012" height="596" alt="Orders Details " src="https://github.com/user-attachments/assets/6975d919-da7a-48c2-80ac-8462ab764310" />
 <img width="1625" height="780" alt="Add New Order" src="https://github.com/user-attachments/assets/8572b5d9-6479-4954-acb6-98edbb3c1b9b" />
-<img width="1595" height="898" alt="compare" src="https://github.com/user-attachments/assets/0af31bbc-6172-4554-b031-b520af1acb1c" />
+<img width="1595" height="897" alt="compare" src="https://github.com/user-attachments/assets/f01d37e9-21cd-4ca2-af24-99ff321d7895" />
 <img width="981" height="603" alt="Admin Login " src="https://github.com/user-attachments/assets/a98a18f5-f6da-4c0d-aff3-db8ca6ea811d" />
 <img width="1295" height="735" alt="Management " src="https://github.com/user-attachments/assets/fefe9fa9-1e11-4a70-8130-9c36dbc477fb" />
 <img width="1920" height="1030" alt="Products Mangaement " src="https://github.com/user-attachments/assets/4e5754ce-52e4-4ce4-a95a-262b89fc12a7" />
