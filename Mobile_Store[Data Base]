@@ -1,0 +1,449 @@
+USE [master]
+GO
+/****** Object:  Database [Mobile_Store]    Script Date: 5/17/2026 5:10:47 AM ******/
+CREATE DATABASE [Mobile_Store]
+ CONTAINMENT = NONE
+ ON  PRIMARY 
+( NAME = N'Mobile_Store', FILENAME = N'C:\Program Files\Microsoft SQL Server\MSSQL17.MSSQLSERVER\MSSQL\DATA\Mobile_Store.mdf' , SIZE = 8192KB , MAXSIZE = UNLIMITED, FILEGROWTH = 65536KB )
+ LOG ON 
+( NAME = N'Mobile_Store_log', FILENAME = N'C:\Program Files\Microsoft SQL Server\MSSQL17.MSSQLSERVER\MSSQL\DATA\Mobile_Store_log.ldf' , SIZE = 8192KB , MAXSIZE = 2048GB , FILEGROWTH = 65536KB )
+ WITH CATALOG_COLLATION = DATABASE_DEFAULT, LEDGER = OFF
+GO
+ALTER DATABASE [Mobile_Store] SET COMPATIBILITY_LEVEL = 170
+GO
+IF (1 = FULLTEXTSERVICEPROPERTY('IsFullTextInstalled'))
+begin
+EXEC [Mobile_Store].[dbo].[sp_fulltext_database] @action = 'enable'
+end
+GO
+ALTER DATABASE [Mobile_Store] SET ANSI_NULL_DEFAULT OFF 
+GO
+ALTER DATABASE [Mobile_Store] SET ANSI_NULLS OFF 
+GO
+ALTER DATABASE [Mobile_Store] SET ANSI_PADDING OFF 
+GO
+ALTER DATABASE [Mobile_Store] SET ANSI_WARNINGS OFF 
+GO
+ALTER DATABASE [Mobile_Store] SET ARITHABORT OFF 
+GO
+ALTER DATABASE [Mobile_Store] SET AUTO_CLOSE OFF 
+GO
+ALTER DATABASE [Mobile_Store] SET AUTO_SHRINK OFF 
+GO
+ALTER DATABASE [Mobile_Store] SET AUTO_UPDATE_STATISTICS ON 
+GO
+ALTER DATABASE [Mobile_Store] SET CURSOR_CLOSE_ON_COMMIT OFF 
+GO
+ALTER DATABASE [Mobile_Store] SET CURSOR_DEFAULT  GLOBAL 
+GO
+ALTER DATABASE [Mobile_Store] SET CONCAT_NULL_YIELDS_NULL OFF 
+GO
+ALTER DATABASE [Mobile_Store] SET NUMERIC_ROUNDABORT OFF 
+GO
+ALTER DATABASE [Mobile_Store] SET QUOTED_IDENTIFIER OFF 
+GO
+ALTER DATABASE [Mobile_Store] SET RECURSIVE_TRIGGERS OFF 
+GO
+ALTER DATABASE [Mobile_Store] SET  DISABLE_BROKER 
+GO
+ALTER DATABASE [Mobile_Store] SET AUTO_UPDATE_STATISTICS_ASYNC OFF 
+GO
+ALTER DATABASE [Mobile_Store] SET DATE_CORRELATION_OPTIMIZATION OFF 
+GO
+ALTER DATABASE [Mobile_Store] SET TRUSTWORTHY OFF 
+GO
+ALTER DATABASE [Mobile_Store] SET ALLOW_SNAPSHOT_ISOLATION OFF 
+GO
+ALTER DATABASE [Mobile_Store] SET PARAMETERIZATION SIMPLE 
+GO
+ALTER DATABASE [Mobile_Store] SET READ_COMMITTED_SNAPSHOT OFF 
+GO
+ALTER DATABASE [Mobile_Store] SET HONOR_BROKER_PRIORITY OFF 
+GO
+ALTER DATABASE [Mobile_Store] SET RECOVERY FULL 
+GO
+ALTER DATABASE [Mobile_Store] SET  MULTI_USER 
+GO
+ALTER DATABASE [Mobile_Store] SET PAGE_VERIFY CHECKSUM  
+GO
+ALTER DATABASE [Mobile_Store] SET DB_CHAINING OFF 
+GO
+ALTER DATABASE [Mobile_Store] SET FILESTREAM( NON_TRANSACTED_ACCESS = OFF ) 
+GO
+ALTER DATABASE [Mobile_Store] SET TARGET_RECOVERY_TIME = 60 SECONDS 
+GO
+ALTER DATABASE [Mobile_Store] SET DELAYED_DURABILITY = DISABLED 
+GO
+ALTER DATABASE [Mobile_Store] SET ACCELERATED_DATABASE_RECOVERY = OFF  
+GO
+ALTER DATABASE [Mobile_Store] SET OPTIMIZED_LOCKING = OFF 
+GO
+EXEC sys.sp_db_vardecimal_storage_format N'Mobile_Store', N'ON'
+GO
+ALTER DATABASE [Mobile_Store] SET QUERY_STORE = ON
+GO
+ALTER DATABASE [Mobile_Store] SET QUERY_STORE (OPERATION_MODE = READ_WRITE, CLEANUP_POLICY = (STALE_QUERY_THRESHOLD_DAYS = 30), DATA_FLUSH_INTERVAL_SECONDS = 900, INTERVAL_LENGTH_MINUTES = 60, MAX_STORAGE_SIZE_MB = 1000, QUERY_CAPTURE_MODE = AUTO, SIZE_BASED_CLEANUP_MODE = AUTO, MAX_PLANS_PER_QUERY = 200, WAIT_STATS_CAPTURE_MODE = ON)
+GO
+USE [Mobile_Store]
+GO
+/****** Object:  Table [dbo].[brands]    Script Date: 5/17/2026 5:10:47 AM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[brands](
+	[brand_id] [int] IDENTITY(1,1) NOT NULL,
+	[name] [varchar](50) NOT NULL,
+	[logo_url] [varchar](200) NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[brand_id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[categories]    Script Date: 5/17/2026 5:10:47 AM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[categories](
+	[category_id] [int] IDENTITY(1,1) NOT NULL,
+	[name] [varchar](50) NOT NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[category_id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[OrderItems]    Script Date: 5/17/2026 5:10:47 AM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[OrderItems](
+	[OrderItemID] [int] IDENTITY(1,1) NOT NULL,
+	[OrderID] [int] NOT NULL,
+	[ProductID] [int] NOT NULL,
+	[ProductName] [nvarchar](100) NOT NULL,
+	[Quantity] [int] NOT NULL,
+	[UnitPrice] [decimal](10, 2) NOT NULL,
+	[TotalPrice] [decimal](10, 2) NOT NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[OrderItemID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Orders]    Script Date: 5/17/2026 5:10:47 AM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Orders](
+	[OrderID] [int] IDENTITY(1,1) NOT NULL,
+	[CustomerName] [nvarchar](100) NOT NULL,
+	[CustomerPhone] [nvarchar](250) NULL,
+	[CustomerAddress] [nvarchar](200) NOT NULL,
+	[OrderDate] [datetime] NOT NULL,
+	[TotalAmount] [decimal](10, 2) NOT NULL,
+	[Status] [nvarchar](20) NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[OrderID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[product_specs]    Script Date: 5/17/2026 5:10:47 AM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[product_specs](
+	[spec_id] [int] IDENTITY(1,1) NOT NULL,
+	[product_id] [int] NULL,
+	[storage] [varchar](20) NULL,
+	[ram] [varchar](20) NULL,
+	[screen_size] [varchar](20) NULL,
+	[battery] [varchar](20) NULL,
+	[color] [varchar](30) NULL,
+	[os] [varchar](30) NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[spec_id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[products]    Script Date: 5/17/2026 5:10:47 AM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[products](
+	[product_id] [int] IDENTITY(1,1) NOT NULL,
+	[brand_id] [int] NULL,
+	[category_id] [int] NULL,
+	[name] [varchar](100) NOT NULL,
+	[price] [decimal](8, 2) NOT NULL,
+	[image_url] [varchar](200) NULL,
+	[description] [text] NULL,
+	[is_available] [bit] NULL,
+	[StockQunatity] [int] NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[product_id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[users]    Script Date: 5/17/2026 5:10:47 AM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[users](
+	[user_id] [int] IDENTITY(1,1) NOT NULL,
+	[username] [varchar](50) NOT NULL,
+	[password] [varchar](250) NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[user_id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+SET IDENTITY_INSERT [dbo].[brands] ON 
+
+INSERT [dbo].[brands] ([brand_id], [name], [logo_url]) VALUES (1, N'Apple', N'images/apple.png')
+INSERT [dbo].[brands] ([brand_id], [name], [logo_url]) VALUES (2, N'Samsung', N'images/samsung.png')
+INSERT [dbo].[brands] ([brand_id], [name], [logo_url]) VALUES (3, N'Huawei', N'images/huawei.png')
+INSERT [dbo].[brands] ([brand_id], [name], [logo_url]) VALUES (4, N'Xiaomi', N'images/xiaomi.png')
+INSERT [dbo].[brands] ([brand_id], [name], [logo_url]) VALUES (5, N'OnePlus', N'images/oneplus.png')
+INSERT [dbo].[brands] ([brand_id], [name], [logo_url]) VALUES (6, N'Sony', N'images/sony.png')
+INSERT [dbo].[brands] ([brand_id], [name], [logo_url]) VALUES (7, N'Google', N'images/google.png')
+INSERT [dbo].[brands] ([brand_id], [name], [logo_url]) VALUES (8, N'Motorola', N'images/motorola.png')
+INSERT [dbo].[brands] ([brand_id], [name], [logo_url]) VALUES (9, N'Nokia', N'images/nokia.png')
+INSERT [dbo].[brands] ([brand_id], [name], [logo_url]) VALUES (10, N'Lenovo', N'images/lenovo.png')
+SET IDENTITY_INSERT [dbo].[brands] OFF
+GO
+SET IDENTITY_INSERT [dbo].[categories] ON 
+
+INSERT [dbo].[categories] ([category_id], [name]) VALUES (1, N'Flagship')
+INSERT [dbo].[categories] ([category_id], [name]) VALUES (2, N'Mid-Range')
+INSERT [dbo].[categories] ([category_id], [name]) VALUES (3, N'Budget')
+INSERT [dbo].[categories] ([category_id], [name]) VALUES (4, N'Gaming')
+INSERT [dbo].[categories] ([category_id], [name]) VALUES (5, N'Tablet')
+INSERT [dbo].[categories] ([category_id], [name]) VALUES (6, N'Foldable')
+SET IDENTITY_INSERT [dbo].[categories] OFF
+GO
+SET IDENTITY_INSERT [dbo].[OrderItems] ON 
+
+INSERT [dbo].[OrderItems] ([OrderItemID], [OrderID], [ProductID], [ProductName], [Quantity], [UnitPrice], [TotalPrice]) VALUES (3, 3, 8, N'iPhone 13 Mini', 2, CAST(499.00 AS Decimal(10, 2)), CAST(998.00 AS Decimal(10, 2)))
+INSERT [dbo].[OrderItems] ([OrderItemID], [OrderID], [ProductID], [ProductName], [Quantity], [UnitPrice], [TotalPrice]) VALUES (1003, 1003, 4, N'iPhone 15 Plus', 2, CAST(899.00 AS Decimal(10, 2)), CAST(1798.00 AS Decimal(10, 2)))
+INSERT [dbo].[OrderItems] ([OrderItemID], [OrderID], [ProductID], [ProductName], [Quantity], [UnitPrice], [TotalPrice]) VALUES (1004, 1004, 2, N'iPhone 15 Pro', 2, CAST(999.00 AS Decimal(10, 2)), CAST(1998.00 AS Decimal(10, 2)))
+INSERT [dbo].[OrderItems] ([OrderItemID], [OrderID], [ProductID], [ProductName], [Quantity], [UnitPrice], [TotalPrice]) VALUES (1005, 1005, 3, N'iPhone 15', 2, CAST(799.00 AS Decimal(10, 2)), CAST(1598.00 AS Decimal(10, 2)))
+INSERT [dbo].[OrderItems] ([OrderItemID], [OrderID], [ProductID], [ProductName], [Quantity], [UnitPrice], [TotalPrice]) VALUES (1006, 1006, 8, N'iPhone 13 Mini', 2, CAST(499.00 AS Decimal(10, 2)), CAST(998.00 AS Decimal(10, 2)))
+INSERT [dbo].[OrderItems] ([OrderItemID], [OrderID], [ProductID], [ProductName], [Quantity], [UnitPrice], [TotalPrice]) VALUES (1007, 1007, 2, N'iPhone 15 Pro', 3, CAST(999.00 AS Decimal(10, 2)), CAST(2997.00 AS Decimal(10, 2)))
+INSERT [dbo].[OrderItems] ([OrderItemID], [OrderID], [ProductID], [ProductName], [Quantity], [UnitPrice], [TotalPrice]) VALUES (2011, 2011, 5, N'iPhone 14', 3, CAST(699.00 AS Decimal(10, 2)), CAST(2097.00 AS Decimal(10, 2)))
+SET IDENTITY_INSERT [dbo].[OrderItems] OFF
+GO
+SET IDENTITY_INSERT [dbo].[Orders] ON 
+
+INSERT [dbo].[Orders] ([OrderID], [CustomerName], [CustomerPhone], [CustomerAddress], [OrderDate], [TotalAmount], [Status]) VALUES (2, N'Xavier', N'', N'Texas', CAST(N'2026-04-12T16:03:08.910' AS DateTime), CAST(1798.00 AS Decimal(10, 2)), N'3')
+INSERT [dbo].[Orders] ([OrderID], [CustomerName], [CustomerPhone], [CustomerAddress], [OrderDate], [TotalAmount], [Status]) VALUES (3, N'Brian', N'', N'new york city', CAST(N'2026-04-12T16:45:43.823' AS DateTime), CAST(998.00 AS Decimal(10, 2)), N'1')
+INSERT [dbo].[Orders] ([OrderID], [CustomerName], [CustomerPhone], [CustomerAddress], [OrderDate], [TotalAmount], [Status]) VALUES (1003, N'Zain', N'', N'Damascus', CAST(N'2026-04-13T11:39:53.653' AS DateTime), CAST(1798.00 AS Decimal(10, 2)), N'1')
+INSERT [dbo].[Orders] ([OrderID], [CustomerName], [CustomerPhone], [CustomerAddress], [OrderDate], [TotalAmount], [Status]) VALUES (1004, N'Brian', N'', N'Texas , Lubboco', CAST(N'2026-04-13T11:43:05.817' AS DateTime), CAST(1998.00 AS Decimal(10, 2)), N'1')
+INSERT [dbo].[Orders] ([OrderID], [CustomerName], [CustomerPhone], [CustomerAddress], [OrderDate], [TotalAmount], [Status]) VALUES (1005, N'James', N'', N'California', CAST(N'2026-04-13T12:29:32.797' AS DateTime), CAST(1598.00 AS Decimal(10, 2)), N'1')
+INSERT [dbo].[Orders] ([OrderID], [CustomerName], [CustomerPhone], [CustomerAddress], [OrderDate], [TotalAmount], [Status]) VALUES (1006, N'Marya', N'', N'Maxico', CAST(N'2026-04-16T11:54:34.423' AS DateTime), CAST(998.00 AS Decimal(10, 2)), N'1')
+INSERT [dbo].[Orders] ([OrderID], [CustomerName], [CustomerPhone], [CustomerAddress], [OrderDate], [TotalAmount], [Status]) VALUES (1007, N'Nour', N'', N'Mazzah', CAST(N'2026-04-19T17:16:00.957' AS DateTime), CAST(2997.00 AS Decimal(10, 2)), N'2')
+INSERT [dbo].[Orders] ([OrderID], [CustomerName], [CustomerPhone], [CustomerAddress], [OrderDate], [TotalAmount], [Status]) VALUES (2011, N'Luke Combas', N'iPhone 14', N'Tulsa King', CAST(N'2026-04-22T16:33:44.907' AS DateTime), CAST(2097.00 AS Decimal(10, 2)), N'0')
+SET IDENTITY_INSERT [dbo].[Orders] OFF
+GO
+SET IDENTITY_INSERT [dbo].[product_specs] ON 
+
+INSERT [dbo].[product_specs] ([spec_id], [product_id], [storage], [ram], [screen_size], [battery], [color], [os]) VALUES (1, 1, N'1TB', N'8GB', N'6.7"', N'4422mAh', N'Black Titanium', N'iOS 17')
+INSERT [dbo].[product_specs] ([spec_id], [product_id], [storage], [ram], [screen_size], [battery], [color], [os]) VALUES (2, 2, N'256GB', N'8GB', N'6.1"', N'3274mAh', N'Natural Titanium', N'iOS 17')
+INSERT [dbo].[product_specs] ([spec_id], [product_id], [storage], [ram], [screen_size], [battery], [color], [os]) VALUES (3, 3, N'128GB', N'6GB', N'6.1"', N'3349mAh', N'Pink', N'iOS 17')
+INSERT [dbo].[product_specs] ([spec_id], [product_id], [storage], [ram], [screen_size], [battery], [color], [os]) VALUES (4, 4, N'128GB', N'6GB', N'6.7"', N'4383mAh', N'Blue', N'iOS 17')
+INSERT [dbo].[product_specs] ([spec_id], [product_id], [storage], [ram], [screen_size], [battery], [color], [os]) VALUES (5, 5, N'128GB', N'6GB', N'6.1"', N'3279mAh', N'Midnight', N'iOS 16')
+INSERT [dbo].[product_specs] ([spec_id], [product_id], [storage], [ram], [screen_size], [battery], [color], [os]) VALUES (6, 6, N'128GB', N'6GB', N'6.7"', N'4325mAh', N'Purple', N'iOS 16')
+INSERT [dbo].[product_specs] ([spec_id], [product_id], [storage], [ram], [screen_size], [battery], [color], [os]) VALUES (7, 7, N'128GB', N'4GB', N'6.1"', N'3227mAh', N'Green', N'iOS 15')
+INSERT [dbo].[product_specs] ([spec_id], [product_id], [storage], [ram], [screen_size], [battery], [color], [os]) VALUES (8, 8, N'128GB', N'4GB', N'5.4"', N'2438mAh', N'Red', N'iOS 15')
+INSERT [dbo].[product_specs] ([spec_id], [product_id], [storage], [ram], [screen_size], [battery], [color], [os]) VALUES (9, 9, N'64GB', N'4GB', N'4.7"', N'2018mAh', N'Midnight', N'iOS 15')
+INSERT [dbo].[product_specs] ([spec_id], [product_id], [storage], [ram], [screen_size], [battery], [color], [os]) VALUES (10, 10, N'1TB', N'8GB', N'6.7"', N'4422mAh', N'White Titanium', N'iOS 17')
+INSERT [dbo].[product_specs] ([spec_id], [product_id], [storage], [ram], [screen_size], [battery], [color], [os]) VALUES (11, 11, N'256GB', N'6GB', N'6.1"', N'3200mAh', N'Deep Purple', N'iOS 16')
+INSERT [dbo].[product_specs] ([spec_id], [product_id], [storage], [ram], [screen_size], [battery], [color], [os]) VALUES (12, 12, N'128GB', N'4GB', N'6.1"', N'2815mAh', N'Black', N'iOS 15')
+INSERT [dbo].[product_specs] ([spec_id], [product_id], [storage], [ram], [screen_size], [battery], [color], [os]) VALUES (13, 13, N'512GB', N'12GB', N'6.8"', N'5000mAh', N'Titanium Black', N'Android 14')
+INSERT [dbo].[product_specs] ([spec_id], [product_id], [storage], [ram], [screen_size], [battery], [color], [os]) VALUES (14, 14, N'256GB', N'12GB', N'6.7"', N'4900mAh', N'Cobalt Violet', N'Android 14')
+INSERT [dbo].[product_specs] ([spec_id], [product_id], [storage], [ram], [screen_size], [battery], [color], [os]) VALUES (15, 15, N'128GB', N'8GB', N'6.2"', N'4000mAh', N'Marble Gray', N'Android 14')
+INSERT [dbo].[product_specs] ([spec_id], [product_id], [storage], [ram], [screen_size], [battery], [color], [os]) VALUES (16, 16, N'128GB', N'8GB', N'6.6"', N'5000mAh', N'Awesome Iceblue', N'Android 14')
+INSERT [dbo].[product_specs] ([spec_id], [product_id], [storage], [ram], [screen_size], [battery], [color], [os]) VALUES (17, 17, N'128GB', N'6GB', N'6.6"', N'5000mAh', N'Awesome Lilac', N'Android 14')
+INSERT [dbo].[product_specs] ([spec_id], [product_id], [storage], [ram], [screen_size], [battery], [color], [os]) VALUES (18, 18, N'128GB', N'6GB', N'6.6"', N'5000mAh', N'Blue Black', N'Android 14')
+INSERT [dbo].[product_specs] ([spec_id], [product_id], [storage], [ram], [screen_size], [battery], [color], [os]) VALUES (19, 19, N'64GB', N'4GB', N'6.7"', N'5000mAh', N'Black', N'Android 13')
+INSERT [dbo].[product_specs] ([spec_id], [product_id], [storage], [ram], [screen_size], [battery], [color], [os]) VALUES (20, 20, N'256GB', N'12GB', N'7.6"', N'4400mAh', N'Icy Blue', N'Android 13')
+INSERT [dbo].[product_specs] ([spec_id], [product_id], [storage], [ram], [screen_size], [battery], [color], [os]) VALUES (21, 21, N'256GB', N'8GB', N'6.7"', N'3700mAh', N'Mint', N'Android 13')
+INSERT [dbo].[product_specs] ([spec_id], [product_id], [storage], [ram], [screen_size], [battery], [color], [os]) VALUES (22, 22, N'256GB', N'12GB', N'6.8"', N'4900mAh', N'Phantom Black', N'Android 13')
+INSERT [dbo].[product_specs] ([spec_id], [product_id], [storage], [ram], [screen_size], [battery], [color], [os]) VALUES (23, 23, N'128GB', N'8GB', N'6.7"', N'6000mAh', N'Awesome Violet', N'Android 13')
+INSERT [dbo].[product_specs] ([spec_id], [product_id], [storage], [ram], [screen_size], [battery], [color], [os]) VALUES (24, 24, N'256GB', N'12GB', N'11.0"', N'8000mAh', N'Graphite', N'Android 13')
+INSERT [dbo].[product_specs] ([spec_id], [product_id], [storage], [ram], [screen_size], [battery], [color], [os]) VALUES (25, 25, N'64GB', N'4GB', N'10.4"', N'6000mAh', N'Gray', N'Android 13')
+INSERT [dbo].[product_specs] ([spec_id], [product_id], [storage], [ram], [screen_size], [battery], [color], [os]) VALUES (26, 26, N'256GB', N'8GB', N'6.67"', N'4815mAh', N'Rococo Pearl', N'HarmonyOS 3')
+INSERT [dbo].[product_specs] ([spec_id], [product_id], [storage], [ram], [screen_size], [battery], [color], [os]) VALUES (27, 27, N'512GB', N'12GB', N'6.82"', N'5000mAh', N'Black', N'HarmonyOS 4')
+INSERT [dbo].[product_specs] ([spec_id], [product_id], [storage], [ram], [screen_size], [battery], [color], [os]) VALUES (28, 28, N'256GB', N'8GB', N'6.78"', N'4000mAh', N'Gold', N'HarmonyOS 3')
+INSERT [dbo].[product_specs] ([spec_id], [product_id], [storage], [ram], [screen_size], [battery], [color], [os]) VALUES (29, 29, N'128GB', N'8GB', N'6.78"', N'4000mAh', N'Silver', N'HarmonyOS 3')
+INSERT [dbo].[product_specs] ([spec_id], [product_id], [storage], [ram], [screen_size], [battery], [color], [os]) VALUES (30, 30, N'128GB', N'8GB', N'11.5"', N'7250mAh', N'Gray', N'HarmonyOS 3')
+INSERT [dbo].[product_specs] ([spec_id], [product_id], [storage], [ram], [screen_size], [battery], [color], [os]) VALUES (31, 31, N'256GB', N'12GB', N'6.73"', N'4880mAh', N'Black', N'Android 14')
+INSERT [dbo].[product_specs] ([spec_id], [product_id], [storage], [ram], [screen_size], [battery], [color], [os]) VALUES (32, 32, N'256GB', N'12GB', N'6.36"', N'4610mAh', N'White', N'Android 14')
+INSERT [dbo].[product_specs] ([spec_id], [product_id], [storage], [ram], [screen_size], [battery], [color], [os]) VALUES (33, 33, N'256GB', N'8GB', N'6.67"', N'5100mAh', N'Midnight Black', N'Android 13')
+INSERT [dbo].[product_specs] ([spec_id], [product_id], [storage], [ram], [screen_size], [battery], [color], [os]) VALUES (34, 34, N'128GB', N'8GB', N'6.67"', N'5000mAh', N'Midnight Black', N'Android 13')
+INSERT [dbo].[product_specs] ([spec_id], [product_id], [storage], [ram], [screen_size], [battery], [color], [os]) VALUES (35, 35, N'128GB', N'6GB', N'6.74"', N'5000mAh', N'Clover Green', N'Android 13')
+INSERT [dbo].[product_specs] ([spec_id], [product_id], [storage], [ram], [screen_size], [battery], [color], [os]) VALUES (36, 36, N'64GB', N'2GB', N'6.52"', N'5000mAh', N'Mint Green', N'Android 13')
+INSERT [dbo].[product_specs] ([spec_id], [product_id], [storage], [ram], [screen_size], [battery], [color], [os]) VALUES (37, 37, N'256GB', N'12GB', N'6.67"', N'4500mAh', N'Cyber Black', N'Android 12')
+INSERT [dbo].[product_specs] ([spec_id], [product_id], [storage], [ram], [screen_size], [battery], [color], [os]) VALUES (38, 38, N'256GB', N'8GB', N'11.0"', N'8840mAh', N'Champagne', N'Android 13')
+INSERT [dbo].[product_specs] ([spec_id], [product_id], [storage], [ram], [screen_size], [battery], [color], [os]) VALUES (39, 39, N'256GB', N'12GB', N'6.82"', N'5400mAh', N'Silky Black', N'Android 14')
+INSERT [dbo].[product_specs] ([spec_id], [product_id], [storage], [ram], [screen_size], [battery], [color], [os]) VALUES (40, 40, N'256GB', N'8GB', N'6.7"', N'4800mAh', N'Titan Black', N'Android 13')
+INSERT [dbo].[product_specs] ([spec_id], [product_id], [storage], [ram], [screen_size], [battery], [color], [os]) VALUES (41, 41, N'256GB', N'8GB', N'6.74"', N'4800mAh', N'Misty Green', N'Android 13')
+INSERT [dbo].[product_specs] ([spec_id], [product_id], [storage], [ram], [screen_size], [battery], [color], [os]) VALUES (42, 42, N'256GB', N'8GB', N'6.7"', N'5000mAh', N'Aqua Surge', N'Android 13')
+INSERT [dbo].[product_specs] ([spec_id], [product_id], [storage], [ram], [screen_size], [battery], [color], [os]) VALUES (43, 43, N'128GB', N'8GB', N'6.72"', N'5000mAh', N'Chromatic Gray', N'Android 13')
+INSERT [dbo].[product_specs] ([spec_id], [product_id], [storage], [ram], [screen_size], [battery], [color], [os]) VALUES (44, 44, N'128GB', N'6GB', N'6.43"', N'4300mAh', N'Black', N'Android 12')
+INSERT [dbo].[product_specs] ([spec_id], [product_id], [storage], [ram], [screen_size], [battery], [color], [os]) VALUES (45, 45, N'256GB', N'12GB', N'6.5"', N'5000mAh', N'Black', N'Android 13')
+INSERT [dbo].[product_specs] ([spec_id], [product_id], [storage], [ram], [screen_size], [battery], [color], [os]) VALUES (46, 46, N'256GB', N'8GB', N'6.1"', N'5000mAh', N'Platinum Silver', N'Android 13')
+INSERT [dbo].[product_specs] ([spec_id], [product_id], [storage], [ram], [screen_size], [battery], [color], [os]) VALUES (47, 47, N'128GB', N'8GB', N'6.1"', N'5000mAh', N'Black', N'Android 13')
+INSERT [dbo].[product_specs] ([spec_id], [product_id], [storage], [ram], [screen_size], [battery], [color], [os]) VALUES (48, 48, N'128GB', N'6GB', N'6.0"', N'5000mAh', N'Black', N'Android 12')
+INSERT [dbo].[product_specs] ([spec_id], [product_id], [storage], [ram], [screen_size], [battery], [color], [os]) VALUES (49, 49, N'512GB', N'12GB', N'6.7"', N'5050mAh', N'Obsidian', N'Android 14')
+INSERT [dbo].[product_specs] ([spec_id], [product_id], [storage], [ram], [screen_size], [battery], [color], [os]) VALUES (50, 50, N'256GB', N'8GB', N'6.2"', N'4575mAh', N'Hazel', N'Android 14')
+INSERT [dbo].[product_specs] ([spec_id], [product_id], [storage], [ram], [screen_size], [battery], [color], [os]) VALUES (51, 51, N'128GB', N'8GB', N'6.1"', N'4385mAh', N'Charcoal', N'Android 13')
+INSERT [dbo].[product_specs] ([spec_id], [product_id], [storage], [ram], [screen_size], [battery], [color], [os]) VALUES (52, 52, N'128GB', N'6GB', N'6.1"', N'4410mAh', N'Sage', N'Android 12')
+INSERT [dbo].[product_specs] ([spec_id], [product_id], [storage], [ram], [screen_size], [battery], [color], [os]) VALUES (53, 53, N'256GB', N'12GB', N'7.6"', N'4821mAh', N'Obsidian', N'Android 13')
+INSERT [dbo].[product_specs] ([spec_id], [product_id], [storage], [ram], [screen_size], [battery], [color], [os]) VALUES (54, 54, N'256GB', N'12GB', N'6.67"', N'4600mAh', N'Interstellar Black', N'Android 13')
+INSERT [dbo].[product_specs] ([spec_id], [product_id], [storage], [ram], [screen_size], [battery], [color], [os]) VALUES (55, 55, N'256GB', N'8GB', N'6.55"', N'4600mAh', N'Nebula Black', N'Android 13')
+INSERT [dbo].[product_specs] ([spec_id], [product_id], [storage], [ram], [screen_size], [battery], [color], [os]) VALUES (56, 56, N'256GB', N'8GB', N'6.74"', N'5000mAh', N'Midnight Blue', N'Android 13')
+INSERT [dbo].[product_specs] ([spec_id], [product_id], [storage], [ram], [screen_size], [battery], [color], [os]) VALUES (57, 57, N'128GB', N'8GB', N'6.5"', N'5000mAh', N'Cosmic Black', N'Android 13')
+INSERT [dbo].[product_specs] ([spec_id], [product_id], [storage], [ram], [screen_size], [battery], [color], [os]) VALUES (58, 58, N'128GB', N'4GB', N'6.5"', N'5000mAh', N'Matte Charcoal', N'Android 13')
+INSERT [dbo].[product_specs] ([spec_id], [product_id], [storage], [ram], [screen_size], [battery], [color], [os]) VALUES (59, 59, N'64GB', N'2GB', N'6.5"', N'5000mAh', N'Off White', N'Android 13')
+INSERT [dbo].[product_specs] ([spec_id], [product_id], [storage], [ram], [screen_size], [battery], [color], [os]) VALUES (60, 60, N'128GB', N'6GB', N'6.43"', N'4200mAh', N'Midnight Sun', N'Android 12')
+INSERT [dbo].[product_specs] ([spec_id], [product_id], [storage], [ram], [screen_size], [battery], [color], [os]) VALUES (61, 61, N'128GB', N'4GB', N'6.58"', N'4500mAh', N'Meteor Grey', N'Android 12')
+INSERT [dbo].[product_specs] ([spec_id], [product_id], [storage], [ram], [screen_size], [battery], [color], [os]) VALUES (62, 62, N'64GB', N'4GB', N'6.5"', N'5050mAh', N'Nordic Blue', N'Android 11')
+INSERT [dbo].[product_specs] ([spec_id], [product_id], [storage], [ram], [screen_size], [battery], [color], [os]) VALUES (63, 63, N'64GB', N'3GB', N'6.52"', N'5050mAh', N'Charcoal', N'Android 13')
+INSERT [dbo].[product_specs] ([spec_id], [product_id], [storage], [ram], [screen_size], [battery], [color], [os]) VALUES (64, 64, N'32GB', N'2GB', N'6.52"', N'3000mAh', N'Cyan', N'Android 12')
+INSERT [dbo].[product_specs] ([spec_id], [product_id], [storage], [ram], [screen_size], [battery], [color], [os]) VALUES (65, 65, N'256GB', N'16GB', N'6.92"', N'5500mAh', N'Ultimate Black', N'Android 11')
+INSERT [dbo].[product_specs] ([spec_id], [product_id], [storage], [ram], [screen_size], [battery], [color], [os]) VALUES (66, 66, N'512GB', N'18GB', N'6.92"', N'5000mAh', N'Titanium White', N'Android 12')
+INSERT [dbo].[product_specs] ([spec_id], [product_id], [storage], [ram], [screen_size], [battery], [color], [os]) VALUES (67, 67, N'128GB', N'6GB', N'6.5"', N'6000mAh', N'Platinum Grey', N'Android 11')
+INSERT [dbo].[product_specs] ([spec_id], [product_id], [storage], [ram], [screen_size], [battery], [color], [os]) VALUES (68, 68, N'128GB', N'4GB', N'6.5"', N'5000mAh', N'Pearl White', N'Android 11')
+INSERT [dbo].[product_specs] ([spec_id], [product_id], [storage], [ram], [screen_size], [battery], [color], [os]) VALUES (69, 69, N'64GB', N'3GB', N'6.5"', N'5000mAh', N'Blue', N'Android 11')
+INSERT [dbo].[product_specs] ([spec_id], [product_id], [storage], [ram], [screen_size], [battery], [color], [os]) VALUES (70, 70, N'256GB', N'8GB', N'12.6"', N'10200mAh', N'Storm Grey', N'Android 12')
+INSERT [dbo].[product_specs] ([spec_id], [product_id], [storage], [ram], [screen_size], [battery], [color], [os]) VALUES (71, 71, N'64GB', N'4GB', N'10.6"', N'7700mAh', N'Platinum Grey', N'Android 12')
+INSERT [dbo].[product_specs] ([spec_id], [product_id], [storage], [ram], [screen_size], [battery], [color], [os]) VALUES (72, 72, N'256GB', N'12GB', N'8.8"', N'6550mAh', N'Storm Grey', N'Android 13')
+INSERT [dbo].[product_specs] ([spec_id], [product_id], [storage], [ram], [screen_size], [battery], [color], [os]) VALUES (73, 73, N'128GB', N'4GB', N'6.5"', N'5000mAh', N'Blue', N'Android 11')
+INSERT [dbo].[product_specs] ([spec_id], [product_id], [storage], [ram], [screen_size], [battery], [color], [os]) VALUES (74, 74, N'32GB', N'2GB', N'7.0"', N'4000mAh', N'Black', N'Android 10')
+INSERT [dbo].[product_specs] ([spec_id], [product_id], [storage], [ram], [screen_size], [battery], [color], [os]) VALUES (76, 76, N'128GB', N'12GB', N'6''2', N'4000mAh', N'BlueICe', N'Android 15')
+INSERT [dbo].[product_specs] ([spec_id], [product_id], [storage], [ram], [screen_size], [battery], [color], [os]) VALUES (77, 77, N'128GB', N'8GB', N'6''1', N'3279mAh', N'black', N'ios 18')
+SET IDENTITY_INSERT [dbo].[product_specs] OFF
+GO
+SET IDENTITY_INSERT [dbo].[products] ON 
+
+INSERT [dbo].[products] ([product_id], [brand_id], [category_id], [name], [price], [image_url], [description], [is_available], [StockQunatity]) VALUES (1, 1, 1, N'iPhone 15 Pro Max', CAST(1199.00 AS Decimal(8, 2)), N'Images/iphone15promax.jpeg', N'Top of the line iPhone with titanium design', 1, NULL)
+INSERT [dbo].[products] ([product_id], [brand_id], [category_id], [name], [price], [image_url], [description], [is_available], [StockQunatity]) VALUES (2, 1, 1, N'iPhone 15 Pro', CAST(999.00 AS Decimal(8, 2)), N'images/iphone15pro.jpg', N'Pro camera system with A17 chip', 1, NULL)
+INSERT [dbo].[products] ([product_id], [brand_id], [category_id], [name], [price], [image_url], [description], [is_available], [StockQunatity]) VALUES (3, 1, 1, N'iPhone 15', CAST(799.00 AS Decimal(8, 2)), N'images/iphone15.jpg', N'Dynamic Island comes to standard iPhone', 1, NULL)
+INSERT [dbo].[products] ([product_id], [brand_id], [category_id], [name], [price], [image_url], [description], [is_available], [StockQunatity]) VALUES (4, 1, 1, N'iPhone 15 Plus', CAST(899.00 AS Decimal(8, 2)), N'images/iphone15plus.jpg', N'Big screen iPhone 15 experience', 1, NULL)
+INSERT [dbo].[products] ([product_id], [brand_id], [category_id], [name], [price], [image_url], [description], [is_available], [StockQunatity]) VALUES (5, 1, 1, N'iPhone 14', CAST(699.00 AS Decimal(8, 2)), N'images/iphone14.jpg', N'Reliable performer with great cameras', 1, NULL)
+INSERT [dbo].[products] ([product_id], [brand_id], [category_id], [name], [price], [image_url], [description], [is_available], [StockQunatity]) VALUES (6, 1, 1, N'iPhone 14 Plus', CAST(799.00 AS Decimal(8, 2)), N'C:\Users\ASUS\Desktop\photos of the project Mobile_Store\apple-iphone-x-new-2.jpg', N'Large display iPhone 14', 1, NULL)
+INSERT [dbo].[products] ([product_id], [brand_id], [category_id], [name], [price], [image_url], [description], [is_available], [StockQunatity]) VALUES (7, 1, 1, N'iPhone 13', CAST(599.00 AS Decimal(8, 2)), N'images/iphone13.jpg', N'Compact design with great battery', 1, NULL)
+INSERT [dbo].[products] ([product_id], [brand_id], [category_id], [name], [price], [image_url], [description], [is_available], [StockQunatity]) VALUES (8, 1, 1, N'iPhone 13 Mini', CAST(499.00 AS Decimal(8, 2)), N'images/iphone13mini.jpg', N'Small but powerful iPhone', 1, NULL)
+INSERT [dbo].[products] ([product_id], [brand_id], [category_id], [name], [price], [image_url], [description], [is_available], [StockQunatity]) VALUES (9, 1, 1, N'iPhone SE 2022', CAST(429.00 AS Decimal(8, 2)), N'images/iphonese.jpg', N'Affordable iPhone with A15 chip', 1, NULL)
+INSERT [dbo].[products] ([product_id], [brand_id], [category_id], [name], [price], [image_url], [description], [is_available], [StockQunatity]) VALUES (10, 1, 6, N'iPhone 15 Fold', CAST(1799.00 AS Decimal(8, 2)), N'images/iphone15fold.jpg', N'Apples first foldable phone', 1, NULL)
+INSERT [dbo].[products] ([product_id], [brand_id], [category_id], [name], [price], [image_url], [description], [is_available], [StockQunatity]) VALUES (11, 1, 1, N'iPhone 14 Pro', CAST(899.00 AS Decimal(8, 2)), N'images/iphone14pro.jpg', N'Always On Display with Dynamic Island', 1, NULL)
+INSERT [dbo].[products] ([product_id], [brand_id], [category_id], [name], [price], [image_url], [description], [is_available], [StockQunatity]) VALUES (12, 1, 1, N'iPhone 12', CAST(499.00 AS Decimal(8, 2)), N'images/iphone12.jpg', N'5G capable iPhone with OLED display', 1, NULL)
+INSERT [dbo].[products] ([product_id], [brand_id], [category_id], [name], [price], [image_url], [description], [is_available], [StockQunatity]) VALUES (13, 2, 1, N'Samsung Galaxy S24 Ultra', CAST(1299.00 AS Decimal(8, 2)), N'images/s24ultra.jpg', N'Built-in S Pen with AI features', 1, NULL)
+INSERT [dbo].[products] ([product_id], [brand_id], [category_id], [name], [price], [image_url], [description], [is_available], [StockQunatity]) VALUES (14, 2, 1, N'Samsung Galaxy S24 Plus', CAST(999.00 AS Decimal(8, 2)), N'images/s24plus.jpg', N'Large display Galaxy flagship', 1, NULL)
+INSERT [dbo].[products] ([product_id], [brand_id], [category_id], [name], [price], [image_url], [description], [is_available], [StockQunatity]) VALUES (15, 2, 1, N'Samsung Galaxy S24', CAST(799.00 AS Decimal(8, 2)), N'images/s24.jpg', N'Compact Galaxy flagship 2024', 1, NULL)
+INSERT [dbo].[products] ([product_id], [brand_id], [category_id], [name], [price], [image_url], [description], [is_available], [StockQunatity]) VALUES (16, 2, 2, N'Samsung Galaxy A55', CAST(449.00 AS Decimal(8, 2)), N'images/a55.jpg', N'Mid-range with premium design', 1, NULL)
+INSERT [dbo].[products] ([product_id], [brand_id], [category_id], [name], [price], [image_url], [description], [is_available], [StockQunatity]) VALUES (17, 2, 2, N'Samsung Galaxy A35', CAST(329.00 AS Decimal(8, 2)), N'images/a35.jpg', N'Affordable Galaxy with great display', 1, NULL)
+INSERT [dbo].[products] ([product_id], [brand_id], [category_id], [name], [price], [image_url], [description], [is_available], [StockQunatity]) VALUES (18, 2, 2, N'Samsung Galaxy A15', CAST(199.00 AS Decimal(8, 2)), N'images/a15.jpg', N'Budget Galaxy with 50MP camera', 1, NULL)
+INSERT [dbo].[products] ([product_id], [brand_id], [category_id], [name], [price], [image_url], [description], [is_available], [StockQunatity]) VALUES (19, 2, 3, N'Samsung Galaxy A05', CAST(149.00 AS Decimal(8, 2)), N'images/a05.jpg', N'Entry level Samsung smartphone', 1, NULL)
+INSERT [dbo].[products] ([product_id], [brand_id], [category_id], [name], [price], [image_url], [description], [is_available], [StockQunatity]) VALUES (20, 2, 6, N'Samsung Galaxy Z Fold 5', CAST(1799.00 AS Decimal(8, 2)), N'images/zfold5.jpg', N'Premium foldable with S Pen support', 1, NULL)
+INSERT [dbo].[products] ([product_id], [brand_id], [category_id], [name], [price], [image_url], [description], [is_available], [StockQunatity]) VALUES (21, 2, 6, N'Samsung Galaxy Z Flip 5', CAST(999.00 AS Decimal(8, 2)), N'images/zflip5.jpg', N'Compact flip foldable phone', 1, NULL)
+INSERT [dbo].[products] ([product_id], [brand_id], [category_id], [name], [price], [image_url], [description], [is_available], [StockQunatity]) VALUES (22, 2, 1, N'Samsung Galaxy S23 Ultra', CAST(1099.00 AS Decimal(8, 2)), N'images/s23ultra.jpg', N'200MP camera with built-in S Pen', 1, NULL)
+INSERT [dbo].[products] ([product_id], [brand_id], [category_id], [name], [price], [image_url], [description], [is_available], [StockQunatity]) VALUES (23, 2, 4, N'Samsung Galaxy A54', CAST(399.00 AS Decimal(8, 2)), N'images/a54gaming.jpg', N'Gaming capable mid-range phone', 1, NULL)
+INSERT [dbo].[products] ([product_id], [brand_id], [category_id], [name], [price], [image_url], [description], [is_available], [StockQunatity]) VALUES (24, 2, 5, N'Samsung Galaxy Tab S9', CAST(799.00 AS Decimal(8, 2)), N'images/tabs9.jpg', N'Premium Android tablet 2023', 1, NULL)
+INSERT [dbo].[products] ([product_id], [brand_id], [category_id], [name], [price], [image_url], [description], [is_available], [StockQunatity]) VALUES (25, 2, 5, N'Samsung Galaxy Tab A9', CAST(299.00 AS Decimal(8, 2)), N'images/taba9.jpg', N'Affordable Samsung tablet', 1, NULL)
+INSERT [dbo].[products] ([product_id], [brand_id], [category_id], [name], [price], [image_url], [description], [is_available], [StockQunatity]) VALUES (26, 3, 1, N'Huawei P60 Pro', CAST(999.00 AS Decimal(8, 2)), N'images/p60pro.jpg', N'Variable aperture camera system', 1, NULL)
+INSERT [dbo].[products] ([product_id], [brand_id], [category_id], [name], [price], [image_url], [description], [is_available], [StockQunatity]) VALUES (27, 3, 1, N'Huawei Mate 60 Pro', CAST(1099.00 AS Decimal(8, 2)), N'images/mate60pro.jpg', N'Satellite calling capable flagship', 1, NULL)
+INSERT [dbo].[products] ([product_id], [brand_id], [category_id], [name], [price], [image_url], [description], [is_available], [StockQunatity]) VALUES (28, 3, 2, N'Huawei Nova 11', CAST(499.00 AS Decimal(8, 2)), N'images/nova11.jpg', N'Stylish mid-range with great selfie camera', 1, NULL)
+INSERT [dbo].[products] ([product_id], [brand_id], [category_id], [name], [price], [image_url], [description], [is_available], [StockQunatity]) VALUES (29, 3, 2, N'Huawei Nova 10', CAST(399.00 AS Decimal(8, 2)), N'images/nova10.jpg', N'Fast charging mid-ranger', 1, NULL)
+INSERT [dbo].[products] ([product_id], [brand_id], [category_id], [name], [price], [image_url], [description], [is_available], [StockQunatity]) VALUES (30, 3, 5, N'Huawei MatePad Pro', CAST(699.00 AS Decimal(8, 2)), N'images/matepadpro.jpg', N'Premium Huawei tablet', 1, NULL)
+INSERT [dbo].[products] ([product_id], [brand_id], [category_id], [name], [price], [image_url], [description], [is_available], [StockQunatity]) VALUES (31, 4, 1, N'Xiaomi 14 Pro', CAST(999.00 AS Decimal(8, 2)), N'images/xiaomi14pro.jpg', N'Leica optics with Snapdragon 8 Gen 3', 1, NULL)
+INSERT [dbo].[products] ([product_id], [brand_id], [category_id], [name], [price], [image_url], [description], [is_available], [StockQunatity]) VALUES (32, 4, 1, N'Xiaomi 14', CAST(799.00 AS Decimal(8, 2)), N'images/xiaomi14.jpg', N'Compact flagship with Leica cameras', 1, NULL)
+INSERT [dbo].[products] ([product_id], [brand_id], [category_id], [name], [price], [image_url], [description], [is_available], [StockQunatity]) VALUES (33, 4, 2, N'Xiaomi Redmi Note 13 Pro', CAST(349.00 AS Decimal(8, 2)), N'C:\Users\ASUS\source\repos\Mobile_Store\bin\Debug\Images\xiaomi-redmi-note-13-pro-5g-1708944090923215790.jpg', N'200MP camera on a budget', 1, NULL)
+INSERT [dbo].[products] ([product_id], [brand_id], [category_id], [name], [price], [image_url], [description], [is_available], [StockQunatity]) VALUES (34, 4, 2, N'Xiaomi Redmi Note 13', CAST(249.00 AS Decimal(8, 2)), N'images/note13.jpg', N'AMOLED display at great price', 1, NULL)
+INSERT [dbo].[products] ([product_id], [brand_id], [category_id], [name], [price], [image_url], [description], [is_available], [StockQunatity]) VALUES (35, 4, 3, N'Xiaomi Redmi 13C', CAST(149.00 AS Decimal(8, 2)), N'images/redmi13c.jpg', N'Entry level Xiaomi phone', 1, NULL)
+INSERT [dbo].[products] ([product_id], [brand_id], [category_id], [name], [price], [image_url], [description], [is_available], [StockQunatity]) VALUES (36, 4, 3, N'Xiaomi Redmi A3', CAST(99.00 AS Decimal(8, 2)), N'images/redmia3.jpg', N'Ultra affordable smartphone', 1, NULL)
+INSERT [dbo].[products] ([product_id], [brand_id], [category_id], [name], [price], [image_url], [description], [is_available], [StockQunatity]) VALUES (37, 4, 4, N'Xiaomi Black Shark 5', CAST(599.00 AS Decimal(8, 2)), N'images/blackshark5.jpg', N'Gaming phone with shoulder triggers', 1, NULL)
+INSERT [dbo].[products] ([product_id], [brand_id], [category_id], [name], [price], [image_url], [description], [is_available], [StockQunatity]) VALUES (38, 4, 5, N'Xiaomi Pad 6', CAST(449.00 AS Decimal(8, 2)), N'images/xiaomipad6.jpg', N'High refresh rate Xiaomi tablet', 1, NULL)
+INSERT [dbo].[products] ([product_id], [brand_id], [category_id], [name], [price], [image_url], [description], [is_available], [StockQunatity]) VALUES (39, 5, 1, N'OnePlus 12', CAST(799.00 AS Decimal(8, 2)), N'images/oneplus12.jpg', N'Hasselblad cameras with fast charging', 1, NULL)
+INSERT [dbo].[products] ([product_id], [brand_id], [category_id], [name], [price], [image_url], [description], [is_available], [StockQunatity]) VALUES (40, 5, 1, N'OnePlus 11', CAST(699.00 AS Decimal(8, 2)), N'images/oneplus11.jpg', N'Flagship killer with great cameras', 1, NULL)
+INSERT [dbo].[products] ([product_id], [brand_id], [category_id], [name], [price], [image_url], [description], [is_available], [StockQunatity]) VALUES (41, 5, 2, N'OnePlus Nord 3', CAST(499.00 AS Decimal(8, 2)), N'images/nord3.jpg', N'Mid-range with 80W fast charging', 1, NULL)
+INSERT [dbo].[products] ([product_id], [brand_id], [category_id], [name], [price], [image_url], [description], [is_available], [StockQunatity]) VALUES (42, 5, 2, N'OnePlus Nord CE 3', CAST(299.00 AS Decimal(8, 2)), N'images/nordce3.jpg', N'Affordable Nord experience', 1, NULL)
+INSERT [dbo].[products] ([product_id], [brand_id], [category_id], [name], [price], [image_url], [description], [is_available], [StockQunatity]) VALUES (43, 5, 3, N'OnePlus Nord N30', CAST(249.00 AS Decimal(8, 2)), N'images/nordn30.jpg', N'Budget phone with 50W charging', 1, NULL)
+INSERT [dbo].[products] ([product_id], [brand_id], [category_id], [name], [price], [image_url], [description], [is_available], [StockQunatity]) VALUES (44, 5, 3, N'OnePlus Nord N20', CAST(199.00 AS Decimal(8, 2)), N'images/nordn20.jpg', N'Slim budget smartphone', 1, NULL)
+INSERT [dbo].[products] ([product_id], [brand_id], [category_id], [name], [price], [image_url], [description], [is_available], [StockQunatity]) VALUES (45, 6, 1, N'Sony Xperia 1 V', CAST(1299.00 AS Decimal(8, 2)), N'images/xperia1v.jpg', N'4K OLED display for creators', 1, NULL)
+INSERT [dbo].[products] ([product_id], [brand_id], [category_id], [name], [price], [image_url], [description], [is_available], [StockQunatity]) VALUES (46, 6, 1, N'Sony Xperia 5 V', CAST(999.00 AS Decimal(8, 2)), N'images/xperia5v.jpg', N'Compact flagship for creators', 1, NULL)
+INSERT [dbo].[products] ([product_id], [brand_id], [category_id], [name], [price], [image_url], [description], [is_available], [StockQunatity]) VALUES (47, 6, 2, N'Sony Xperia 10 V', CAST(499.00 AS Decimal(8, 2)), N'images/xperia10v.jpg', N'Slim mid-ranger with great audio', 1, NULL)
+INSERT [dbo].[products] ([product_id], [brand_id], [category_id], [name], [price], [image_url], [description], [is_available], [StockQunatity]) VALUES (48, 6, 2, N'Sony Xperia 10 IV', CAST(399.00 AS Decimal(8, 2)), N'images/xperia10iv.jpg', N'Long battery life mid-range', 1, NULL)
+INSERT [dbo].[products] ([product_id], [brand_id], [category_id], [name], [price], [image_url], [description], [is_available], [StockQunatity]) VALUES (49, 7, 1, N'Google Pixel 8 Pro', CAST(999.00 AS Decimal(8, 2)), N'images/pixel8pro.jpg', N'Best Android AI features', 1, NULL)
+INSERT [dbo].[products] ([product_id], [brand_id], [category_id], [name], [price], [image_url], [description], [is_available], [StockQunatity]) VALUES (50, 7, 1, N'Google Pixel 8', CAST(699.00 AS Decimal(8, 2)), N'images/pixel8.jpg', N'Pure Android with 7 years updates', 1, NULL)
+INSERT [dbo].[products] ([product_id], [brand_id], [category_id], [name], [price], [image_url], [description], [is_available], [StockQunatity]) VALUES (51, 7, 2, N'Google Pixel 7a', CAST(499.00 AS Decimal(8, 2)), N'images/pixel7a.jpg', N'Affordable Pixel with great camera', 1, NULL)
+INSERT [dbo].[products] ([product_id], [brand_id], [category_id], [name], [price], [image_url], [description], [is_available], [StockQunatity]) VALUES (52, 7, 2, N'Google Pixel 6a', CAST(399.00 AS Decimal(8, 2)), N'images/pixel6a.jpg', N'Budget Pixel experience', 1, NULL)
+INSERT [dbo].[products] ([product_id], [brand_id], [category_id], [name], [price], [image_url], [description], [is_available], [StockQunatity]) VALUES (53, 7, 6, N'Google Pixel Fold', CAST(1799.00 AS Decimal(8, 2)), N'images/pixelfold.jpg', N'Googles first foldable phone', 1, NULL)
+INSERT [dbo].[products] ([product_id], [brand_id], [category_id], [name], [price], [image_url], [description], [is_available], [StockQunatity]) VALUES (54, 8, 2, N'Motorola Edge 40 Pro', CAST(699.00 AS Decimal(8, 2)), N'images/edge40pro.jpg', N'144Hz display with 125W charging', 1, NULL)
+INSERT [dbo].[products] ([product_id], [brand_id], [category_id], [name], [price], [image_url], [description], [is_available], [StockQunatity]) VALUES (55, 8, 2, N'Motorola Edge 40', CAST(499.00 AS Decimal(8, 2)), N'images/edge40.jpg', N'Slim design with fast charging', 1, NULL)
+INSERT [dbo].[products] ([product_id], [brand_id], [category_id], [name], [price], [image_url], [description], [is_available], [StockQunatity]) VALUES (56, 8, 3, N'Motorola Moto G54', CAST(199.00 AS Decimal(8, 2)), N'images/motog54.jpg', N'50MP camera with clean Android', 1, NULL)
+INSERT [dbo].[products] ([product_id], [brand_id], [category_id], [name], [price], [image_url], [description], [is_available], [StockQunatity]) VALUES (57, 8, 3, N'Motorola Moto G23', CAST(179.00 AS Decimal(8, 2)), N'images/motog23.jpg', N'Clean Android with 5000mAh', 1, NULL)
+INSERT [dbo].[products] ([product_id], [brand_id], [category_id], [name], [price], [image_url], [description], [is_available], [StockQunatity]) VALUES (58, 8, 3, N'Motorola Moto G13', CAST(149.00 AS Decimal(8, 2)), N'images/motog13.jpg', N'50MP camera and clean Android 13', 1, NULL)
+INSERT [dbo].[products] ([product_id], [brand_id], [category_id], [name], [price], [image_url], [description], [is_available], [StockQunatity]) VALUES (59, 8, 3, N'Motorola Moto E13', CAST(99.00 AS Decimal(8, 2)), N'images/motoe13.jpg', N'Ultra affordable clean Android', 1, NULL)
+INSERT [dbo].[products] ([product_id], [brand_id], [category_id], [name], [price], [image_url], [description], [is_available], [StockQunatity]) VALUES (60, 9, 2, N'Nokia X30', CAST(399.00 AS Decimal(8, 2)), N'images/nokiax30.jpg', N'Eco-friendly mid-range phone', 1, NULL)
+INSERT [dbo].[products] ([product_id], [brand_id], [category_id], [name], [price], [image_url], [description], [is_available], [StockQunatity]) VALUES (61, 9, 2, N'Nokia G60', CAST(299.00 AS Decimal(8, 2)), N'images/nokiag60.jpg', N'5G Nokia with clean Android', 1, NULL)
+INSERT [dbo].[products] ([product_id], [brand_id], [category_id], [name], [price], [image_url], [description], [is_available], [StockQunatity]) VALUES (62, 9, 3, N'Nokia G21', CAST(179.00 AS Decimal(8, 2)), N'images/nokiag21.jpg', N'3-day battery life phone', 1, NULL)
+INSERT [dbo].[products] ([product_id], [brand_id], [category_id], [name], [price], [image_url], [description], [is_available], [StockQunatity]) VALUES (63, 9, 3, N'Nokia C32', CAST(129.00 AS Decimal(8, 2)), N'images/nokiac32.jpg', N'Entry level with Android 13', 1, NULL)
+INSERT [dbo].[products] ([product_id], [brand_id], [category_id], [name], [price], [image_url], [description], [is_available], [StockQunatity]) VALUES (64, 9, 3, N'Nokia C22', CAST(99.00 AS Decimal(8, 2)), N'images/nokiac22.jpg', N'Affordable Nokia smartphone', 1, NULL)
+INSERT [dbo].[products] ([product_id], [brand_id], [category_id], [name], [price], [image_url], [description], [is_available], [StockQunatity]) VALUES (65, 10, 4, N'Lenovo Legion Phone 2 Pro', CAST(799.00 AS Decimal(8, 2)), N'images/legion2pro.jpg', N'Pop-up cooling fan gaming phone', 1, NULL)
+INSERT [dbo].[products] ([product_id], [brand_id], [category_id], [name], [price], [image_url], [description], [is_available], [StockQunatity]) VALUES (66, 10, 4, N'Lenovo Legion Phone 3 Pro', CAST(999.00 AS Decimal(8, 2)), N'images/legion3pro.jpg', N'Dual USB-C gaming powerhouse', 1, NULL)
+INSERT [dbo].[products] ([product_id], [brand_id], [category_id], [name], [price], [image_url], [description], [is_available], [StockQunatity]) VALUES (67, 10, 2, N'Lenovo K15 Plus', CAST(249.00 AS Decimal(8, 2)), N'images/k15plus.jpg', N'6000mAh with Helio G85', 1, NULL)
+INSERT [dbo].[products] ([product_id], [brand_id], [category_id], [name], [price], [image_url], [description], [is_available], [StockQunatity]) VALUES (68, 10, 2, N'Lenovo K14 Plus', CAST(219.00 AS Decimal(8, 2)), N'images/k14plus.jpg', N'13MP camera with 5000mAh battery', 1, NULL)
+INSERT [dbo].[products] ([product_id], [brand_id], [category_id], [name], [price], [image_url], [description], [is_available], [StockQunatity]) VALUES (69, 10, 3, N'Lenovo K13', CAST(149.00 AS Decimal(8, 2)), N'images/k13.jpg', N'Affordable with large display', 1, NULL)
+INSERT [dbo].[products] ([product_id], [brand_id], [category_id], [name], [price], [image_url], [description], [is_available], [StockQunatity]) VALUES (70, 10, 5, N'Lenovo Tab P12 Pro', CAST(699.00 AS Decimal(8, 2)), N'images/tabp12pro.jpg', N'Premium Lenovo tablet with AMOLED', 1, NULL)
+INSERT [dbo].[products] ([product_id], [brand_id], [category_id], [name], [price], [image_url], [description], [is_available], [StockQunatity]) VALUES (71, 10, 5, N'Lenovo Tab M10 Plus', CAST(299.00 AS Decimal(8, 2)), N'images/tabm10plus.jpg', N'Affordable Lenovo tablet', 1, NULL)
+INSERT [dbo].[products] ([product_id], [brand_id], [category_id], [name], [price], [image_url], [description], [is_available], [StockQunatity]) VALUES (72, 10, 4, N'Lenovo Legion Tab', CAST(599.00 AS Decimal(8, 2)), N'images/legiontab.jpg', N'Gaming tablet with 144Hz display', 1, NULL)
+INSERT [dbo].[products] ([product_id], [brand_id], [category_id], [name], [price], [image_url], [description], [is_available], [StockQunatity]) VALUES (73, 10, 2, N'Lenovo K15', CAST(199.00 AS Decimal(8, 2)), N'images/k15.jpg', N'Budget Lenovo with big battery', 1, NULL)
+INSERT [dbo].[products] ([product_id], [brand_id], [category_id], [name], [price], [image_url], [description], [is_available], [StockQunatity]) VALUES (74, 10, 3, N'Lenovo A7', CAST(89.00 AS Decimal(8, 2)), N'images/lenovoa7.jpg', N'Ultra budget Android phone', 1, NULL)
+INSERT [dbo].[products] ([product_id], [brand_id], [category_id], [name], [price], [image_url], [description], [is_available], [StockQunatity]) VALUES (76, 2, 1, N'Samsung Galaxy S25', CAST(799.00 AS Decimal(8, 2)), N'C:\Users\ASUS\Desktop\photos of the project Mobile_Store\samsung_s25.jpg.jfif', N'Titnauim Back with Progressed Cameras', 1, NULL)
+INSERT [dbo].[products] ([product_id], [brand_id], [category_id], [name], [price], [image_url], [description], [is_available], [StockQunatity]) VALUES (77, 1, 1, N'IPhoneX C', CAST(599.00 AS Decimal(8, 2)), N'C:\Users\ASUS\Desktop\photos of the project Mobile_Store\apple-iphone-x-new-2.jpg', N'Affordable iPhone with A16 Bionic chip and Apple Intelligence', 1, NULL)
+SET IDENTITY_INSERT [dbo].[products] OFF
+GO
+SET IDENTITY_INSERT [dbo].[users] ON 
+
+INSERT [dbo].[users] ([user_id], [username], [password]) VALUES (1, N'admin', N'8C6976E5B5410415BDE908BD4DEE15DFB167A9C873FC4BB8A81F6F2AB448A918')
+INSERT [dbo].[users] ([user_id], [username], [password]) VALUES (2, N'testuser', N'04F8996DA763B7A969B1028EE3007569EAF3A635486DDAB211D512C85B9DF8FB')
+SET IDENTITY_INSERT [dbo].[users] OFF
+GO
+ALTER TABLE [dbo].[Orders] ADD  DEFAULT (getdate()) FOR [OrderDate]
+GO
+ALTER TABLE [dbo].[Orders] ADD  DEFAULT ('Pending') FOR [Status]
+GO
+ALTER TABLE [dbo].[products] ADD  DEFAULT ((1)) FOR [is_available]
+GO
+ALTER TABLE [dbo].[OrderItems]  WITH CHECK ADD FOREIGN KEY([OrderID])
+REFERENCES [dbo].[Orders] ([OrderID])
+GO
+ALTER TABLE [dbo].[OrderItems]  WITH CHECK ADD FOREIGN KEY([ProductID])
+REFERENCES [dbo].[products] ([product_id])
+GO
+ALTER TABLE [dbo].[product_specs]  WITH CHECK ADD FOREIGN KEY([product_id])
+REFERENCES [dbo].[products] ([product_id])
+GO
+ALTER TABLE [dbo].[products]  WITH CHECK ADD FOREIGN KEY([brand_id])
+REFERENCES [dbo].[brands] ([brand_id])
+GO
+ALTER TABLE [dbo].[products]  WITH CHECK ADD FOREIGN KEY([category_id])
+REFERENCES [dbo].[categories] ([category_id])
+GO
+USE [master]
+GO
+ALTER DATABASE [Mobile_Store] SET  READ_WRITE 
+GO
